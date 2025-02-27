@@ -1,19 +1,11 @@
-# Package ini digunakan untuk berinteraksi dengan API milik Tripay.
+# LARAVEL TRIPAY
+
+Package ini digunakan untuk berinteraksi dengan API milik Tripay.
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/hanzoalpha/laravel-tripay.svg?style=flat-square)](https://packagist.org/packages/hanzoalpha/laravel-tripay)
 [![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/hanzoalpha/laravel-tripay/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/hanzoalpha/laravel-tripay/actions?query=workflow%3Arun-tests+branch%3Amain)
 [![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/hanzoalpha/laravel-tripay/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/hanzoalpha/laravel-tripay/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/hanzoalpha/laravel-tripay.svg?style=flat-square)](https://packagist.org/packages/hanzoalpha/laravel-tripay)
-
-This is where your description should go. Limit it to a paragraph or two. Consider adding a small example.
-
-## Support us
-
-[<img src="https://github-ads.s3.eu-central-1.amazonaws.com/laravel-tripay.jpg?t=1" width="419px" />](https://spatie.be/github-ad-click/laravel-tripay)
-
-We invest a lot of resources into creating [best in class open source packages](https://spatie.be/open-source). You can support us by [buying one of our paid products](https://spatie.be/open-source/support-us).
-
-We highly appreciate you sending us a postcard from your hometown, mentioning which of our package(s) you are using. You'll find our address on [our contact page](https://spatie.be/about-us). We publish all received postcards on [our virtual postcard wall](https://spatie.be/open-source/postcards).
 
 ## Installation
 
@@ -40,6 +32,10 @@ This is the contents of the published config file:
 
 ```php
 return [
+    'tripay_api_production' => env('TRIPAY_API_PRODUCTION', false),
+    'tripay_api_key' => env('TRIPAY_API_KEY'),
+    'tripay_private_key' => env('TRIPAY_PRIVATE_KEY'),
+    'tripay_merchant_code' => env('TRIPAY_MERCHANT_CODE')
 ];
 ```
 
@@ -52,6 +48,7 @@ php artisan vendor:publish --tag="laravel-tripay-views"
 ## Usage
 
 ```php
+use HanzoAlpha\LaravelTripay\Networks\HttpClient;
 $laravelTripay = new HanzoAlpha\LaravelTripay();
 echo $laravelTripay->echoPhrase('Hello, HanzoAlpha!');
 ```

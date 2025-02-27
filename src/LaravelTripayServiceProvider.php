@@ -17,8 +17,7 @@ class LaravelTripayServiceProvider extends PackageServiceProvider
          */
         $package
             ->name('laravel-tripay')
-            ->hasConfigFile()
-            ->hasViews()
+            ->hasConfigFile('laravel-tripay')
             ->hasMigration('create_laravel_tripay_table')
             ->hasCommand(LaravelTripayCommand::class);
     }
