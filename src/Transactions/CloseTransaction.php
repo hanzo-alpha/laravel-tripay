@@ -2,11 +2,13 @@
 
 namespace HanzoAlpha\LaravelTripay\Transactions;
 
+use HanzoAlpha\LaravelTripay\Exceptions\InvalidCredentialException;
 use HanzoAlpha\LaravelTripay\Exceptions\InvalidSignatureHashException;
 use HanzoAlpha\LaravelTripay\Requests\TripayClient;
-use HanzoAlpha\LaravelTripay\Transactions\Transaction;
+use HanzoAlpha\LaravelTripay\Signature;
 use HanzoAlpha\LaravelTripay\Validator\CreateCloseTransactionFormValidation;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Validator;
 
 class CloseTransaction implements Transaction
 {
@@ -30,8 +32,12 @@ class CloseTransaction implements Transaction
 
     /**
      * @inheritDoc
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws \HanzoAlpha\LaravelTripay\Exceptions\InvalidSignatureHashException
+     * @throws \HanzoAlpha\LaravelTripay\Exceptions\TripayValidationException
+     * @throws \HanzoAlpha\LaravelTripay\Exceptions\InvalidCredentialException
      */
-    public function createTransaction(array $data): \HanzoAlpha\LaravelTripay\Transactions\Transaction
+    public function createTransaction(array $data): Transaction
     {
         $validated = CreateCloseTransactionFormValidation::validate($data);
 
@@ -52,15 +58,24 @@ class CloseTransaction implements Transaction
      */
     public function getResponse(): Collection
     {
-        // TODO: Implement getResponse() method.
+        return collect(json_decode($this->response, true));
     }
 
     /**
      * @inheritDoc
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function getDetailTransaction(string $refNumber): \HanzoAlpha\LaravelTripay\Transactions\Transaction
+    public function getDetailTransaction(string $refNumber): Transaction
     {
-        // TODO: Implement getDetailTransaction() method.
+        $validated = Validator::make([
+            'reference' => $refNumber
+        ], [
+            'reference' => 'required|string'
+        ])->validate();
+
+        $this->response = $this->httpClient->sendRequest('GET', 'transaction/detail', $validated);
+
+        return $this;
     }
 
     /**
@@ -68,6 +83,10 @@ class CloseTransaction implements Transaction
      */
     public function setSignatureHash(array $data): string
     {
-        // TODO: Implement setSignatureHash() method.
+        if (isset($data['merchant_ref']) && isset($data['amount'])) {
+            return $data['merchant_ref'].$data['amount'];
+        }
+
+        throw new InvalidCredentialException('gagal melakukan hash. data merchant_ref atau amount belum dikonfigurasi');
     }
 }
