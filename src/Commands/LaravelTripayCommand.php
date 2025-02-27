@@ -1,12 +1,12 @@
 <?php
 
-namespace VendorName\Skeleton\Commands;
+namespace HanzoAlpha\LaravelTripay\Commands;
 
 use Illuminate\Console\Command;
 
-class SkeletonCommand extends Command
+class LaravelTripayCommand extends Command
 {
-    public $signature = 'skeleton';
+    public $signature = 'laravel-tripay';
 
     public $description = 'My command';
 
