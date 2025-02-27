@@ -2,9 +2,9 @@
 
 namespace HanzoAlpha\LaravelTripay\Tests;
 
+use HanzoAlpha\LaravelTripay\LaravelTripayServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Orchestra\Testbench\TestCase as Orchestra;
-use HanzoAlpha\LaravelTripay\LaravelTripayServiceProvider;
 
 class TestCase extends Orchestra
 {
