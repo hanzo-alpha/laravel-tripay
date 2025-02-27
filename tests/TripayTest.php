@@ -206,7 +206,7 @@ it('get daftar transaksi', function () {
     $this->assertTrue($result['success']);
 });
 
-//it('generate and validate signature hash', function () {
+// it('generate and validate signature hash', function () {
 //    $privateKey = config('tripay.tripay_private_key', 'VodDN-Gd63e-J4Vrf-XDggi-tLahm');
 //    $merchantCode = config('tripay.tripay_merchant_code', 'T37858');
 //    $merchantRef = 'INV55567';
@@ -217,13 +217,13 @@ it('get daftar transaksi', function () {
 //
 //    $this->assertEquals($signature, $generatedSignature);
 //    $this->assertTrue(Signature::validate($merchantRef.$amount, $signature));
-//});
+// });
 
-//it(/**
+// it(/**
 // * @throws \HanzoAlpha\LaravelTripay\Exceptions\InvalidTransactionException
 // * @throws \HanzoAlpha\LaravelTripay\Exceptions\InvalidSignatureHashException
 // */ 'validation parameter exception', function () {
 //    $this->expectException(TripayValidationException::class);
 //
 //    \HanzoAlpha\LaravelTripay\Facades\LaravelTripay::createTransaction([]);
-//});
+// });
