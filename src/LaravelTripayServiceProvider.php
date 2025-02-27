@@ -2,9 +2,9 @@
 
 namespace HanzoAlpha\LaravelTripay;
 
+use HanzoAlpha\LaravelTripay\Commands\LaravelTripayCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use HanzoAlpha\LaravelTripay\Commands\LaravelTripayCommand;
 
 class LaravelTripayServiceProvider extends PackageServiceProvider
 {
