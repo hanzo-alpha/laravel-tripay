@@ -7,10 +7,9 @@ use Illuminate\Support\Facades\Validator;
 
 class CreateCloseTransactionFormValidation implements Validation
 {
-
     /**
-     * @inheritDoc
-     * @return array
+     * {@inheritDoc}
+     *
      * @throws \HanzoAlpha\LaravelTripay\Exceptions\TripayValidationException
      */
     public static function validate(array $data): array
@@ -32,7 +31,7 @@ class CreateCloseTransactionFormValidation implements Validation
             'callback_url' => 'bail|nullable|string',
             'return_url' => 'bail|nullable|string',
             'expired_time' => 'bail|nullable|int',
-            'signature' => 'bail|required|string'
+            'signature' => 'bail|required|string',
         ]);
 
         if ($validator->fails()) {

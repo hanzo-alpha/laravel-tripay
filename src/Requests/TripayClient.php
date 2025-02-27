@@ -14,25 +14,13 @@ class TripayClient
 
     const HTTP_POST = 'POST';
 
-    /**
-     * @var string
-     */
     protected string $sandboxURL = 'https://tripay.co.id/api-sandbox/';
 
-    /**
-     * @var string
-     */
     protected string $productionURL = 'https://tripay.co.id/api/';
 
-    /**
-     * @var Client
-     */
     protected Client $client;
 
-    /**
-     * @param  string|null  $apiKey
-     */
-    public function __construct(string $apiKey = null)
+    public function __construct(?string $apiKey = null)
     {
         $apiKey = $apiKey ?? config('tripay.tripay_api_key');
 
@@ -45,16 +33,12 @@ class TripayClient
                 $this->productionURL :
                 $this->sandboxURL,
             'headers' => [
-                'Authorization' => 'Bearer '.$apiKey
-            ]
+                'Authorization' => 'Bearer '.$apiKey,
+            ],
         ]);
     }
 
     /**
-     * @param  string  $method
-     * @param  string  $endpoint
-     * @param  array  $data
-     * @return string
      * @throws Exception|\GuzzleHttp\Exception\GuzzleException
      */
     public function sendRequest(string $method, string $endpoint, array $data): string
@@ -71,9 +55,6 @@ class TripayClient
     }
 
     /**
-     * @param  string  $endpoint
-     * @param  array  $data
-     * @return string
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \Exception
      */
@@ -81,7 +62,7 @@ class TripayClient
     {
         try {
             $result = $this->client->get($endpoint, [
-                'query' => $data
+                'query' => $data,
             ]);
 
             return $result->getBody()->getContents();
@@ -91,9 +72,6 @@ class TripayClient
     }
 
     /**
-     * @param  string  $endpoint
-     * @param  array  $data
-     * @return string
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \Exception
      */
@@ -101,7 +79,7 @@ class TripayClient
     {
         try {
             $result = $this->client->post($endpoint, [
-                'form_params' => $data
+                'form_params' => $data,
             ]);
 
             return $result->getBody()->getContents();

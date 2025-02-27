@@ -41,5 +41,5 @@ return [
     | Masukkan MERCHANT CODE yang anda peroleh dari pihak tripay. MERCHANT CODE
     | diperlukan dalam proses pembuatan signature key.
     */
-    'tripay_merchant_code' => env('TRIPAY_MERCHANT_CODE')
+    'tripay_merchant_code' => env('TRIPAY_MERCHANT_CODE'),
 ];

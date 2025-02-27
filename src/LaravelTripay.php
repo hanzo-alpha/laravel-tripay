@@ -23,39 +23,29 @@ class LaravelTripay
      */
     const CLOSE_TRANSACTION = 'close';
 
-    /**
-     * @var \HanzoAlpha\LaravelTripay\Requests\TripayClient
-     */
     protected TripayClient $httpClient;
 
-    /**
-     * @param  TripayClient  $httpClient
-     */
     public function __construct(TripayClient $httpClient)
     {
         $this->httpClient = $httpClient;
     }
 
     /**
-     * @param  string  $code
-     * @param  string|null  $payCode
-     * @param  string|null  $amount
-     * @param  int  $allowHtml
-     * @return Collection
      * @throws \GuzzleHttp\Exception\GuzzleException
+     *
      * @link https://tripay.co.id/developer?tab=payment-instruction
      */
     public function getInstruksiPembayaran(
         string $code,
-        string $payCode = null,
-        string $amount = null,
+        ?string $payCode = null,
+        ?string $amount = null,
         int $allowHtml = 1
     ): Collection {
         $data = [
             'code' => $code,
             'pay_code' => $payCode,
             'amount' => $amount,
-            'allow_html' => $allowHtml
+            'allow_html' => $allowHtml,
         ];
 
         $result = $this->httpClient->sendRequest('GET', 'payment/instruction', $data);
@@ -64,32 +54,29 @@ class LaravelTripay
     }
 
     /**
-     * @param  string|null  $code
-     * @return Collection
      * @throws \GuzzleHttp\Exception\GuzzleException
+     *
      * @link https://tripay.co.id/developer?tab=merchant-payment-channel
      */
-    public function getChannelPembayaran(string $code = null): Collection
+    public function getChannelPembayaran(?string $code = null): Collection
     {
         $result = $this->httpClient->sendRequest('GET', 'merchant/payment-channel', [
-            'code' => $code
+            'code' => $code,
         ]);
 
         return collect(json_decode($result, true));
     }
 
     /**
-     * @param  int  $amount
-     * @param  string|null  $code
-     * @return Collection
      * @throws \GuzzleHttp\Exception\GuzzleException
+     *
      * @link https://tripay.co.id/developer?tab=merchant-fee-calculator
      */
-    public function getBiayaTransaksi(int $amount, string $code = null): Collection
+    public function getBiayaTransaksi(int $amount, ?string $code = null): Collection
     {
         $data = [
             'code' => $code,
-            'amount' => $amount
+            'amount' => $amount,
         ];
 
         $result = $this->httpClient->sendRequest('GET', 'merchant/fee-calculator', $data);
@@ -98,9 +85,8 @@ class LaravelTripay
     }
 
     /**
-     * @param  array  $data
-     * @return Collection
      * @throws \HanzoAlpha\LaravelTripay\Exceptions\TripayValidationException|\GuzzleHttp\Exception\GuzzleException
+     *
      * @link https://tripay.co.id/developer?tab=merchant-transactions
      */
     public function getDaftarTransaksi(array $data = []): Collection
@@ -112,7 +98,7 @@ class LaravelTripay
             'reference' => 'bail|nullable|string',
             'merchant_ref' => 'bail|nullable|string',
             'method' => 'bail|nullable|string',
-            'status' => 'bail|nullable|string'
+            'status' => 'bail|nullable|string',
         ]);
 
         if ($validator->fails()) {
@@ -125,11 +111,9 @@ class LaravelTripay
     }
 
     /**
-     * @param  array  $data
-     * @param  string  $transactionType
-     * @return Transaction
      * @throws Exceptions\InvalidSignatureHashException
      * @throws InvalidTransactionException
+     *
      * @link https://tripay.co.id/developer?tab=transaction-create
      * @link https://tripay.co.id/developer?tab=open-payment-create
      */
@@ -138,11 +122,13 @@ class LaravelTripay
 
         if ($transactionType == self::OPEN_TRANSACTION) {
             $handler = new OpenTransaction($this->httpClient);
+
             return $handler->createTransaction($data);
         }
 
         if ($transactionType == self::CLOSE_TRANSACTION) {
             $handler = new CloseTransaction($this->httpClient);
+
             return $handler->createTransaction($data);
         }
 
@@ -150,10 +136,8 @@ class LaravelTripay
     }
 
     /**
-     * @param  string  $id
-     * @param  string  $transactionType
-     * @return Transaction
      * @throws InvalidTransactionException
+     *
      * @link https://tripay.co.id/developer?tab=transaction-detail
      * @link https://tripay.co.id/developer?tab=open-payment-detail-
      */
@@ -161,11 +145,13 @@ class LaravelTripay
     {
         if ($transactionType == self::OPEN_TRANSACTION) {
             $handler = new OpenTransaction($this->httpClient);
+
             return $handler->getDetailTransaction($id);
         }
 
         if ($transactionType == self::CLOSE_TRANSACTION) {
             $handler = new CloseTransaction($this->httpClient);
+
             return $handler->getDetailTransaction($id);
         }
 
@@ -174,12 +160,6 @@ class LaravelTripay
 
     /**
      * Load configuration
-     *
-     * @param  bool  $isProduction
-     * @param  string  $apiKey
-     * @param  string  $privateKey
-     * @param  string  $merchantCode
-     * @return void
      */
     public static function loadConfig(
         bool $isProduction,
@@ -192,5 +172,4 @@ class LaravelTripay
         config(['tripay.tripay_private_key' => $privateKey]);
         config(['tripay.tripay_merchant_code' => $merchantCode]);
     }
-
 }
