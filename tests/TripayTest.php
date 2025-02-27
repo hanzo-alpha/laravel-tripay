@@ -32,7 +32,7 @@ it('create open transaction', function () {
         'method' => 'BRIVA',
         'merchant_ref' => 'INV12345',
         'customer_name' => 'Nama Pelanggan',
-        'signature' => Signature::generate('BRIVAINV12345')
+        'signature' => Signature::generate('BRIVAINV12345'),
     ];
 
     // fake api production
@@ -73,11 +73,11 @@ it('create close transaction', function () {
                 'quantity' => 1,
                 'product_url' => 'https://tokokamu.com/product/nama-produk-1',
                 'image_url' => 'https://tokokamu.com/product/nama-produk-1.jpg',
-            ]
+            ],
         ],
         'return_url' => 'https://domainanda.com/redirect',
         'expired_time' => (time() + (24 * 60 * 60)), // 24 jam
-        'signature' => Signature::generate('KODE INVOICE'. 50000)
+        'signature' => Signature::generate('KODE INVOICE'. 50000),
     ];
 
     /**

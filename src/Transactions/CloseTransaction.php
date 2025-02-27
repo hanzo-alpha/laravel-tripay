@@ -12,26 +12,18 @@ use Illuminate\Support\Facades\Validator;
 
 class CloseTransaction implements Transaction
 {
-    /**
-     * @var \HanzoAlpha\LaravelTripay\Requests\TripayClient
-     */
     protected TripayClient $httpClient;
 
-    /**
-     * @var string
-     */
     protected string $response;
 
-    /**
-     * @param  TripayClient  $httpClient
-     */
     public function __construct(TripayClient $httpClient)
     {
         $this->httpClient = $httpClient;
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
+     *
      * @throws \GuzzleHttp\Exception\GuzzleException
      * @throws \HanzoAlpha\LaravelTripay\Exceptions\InvalidSignatureHashException
      * @throws \HanzoAlpha\LaravelTripay\Exceptions\TripayValidationException
@@ -41,7 +33,7 @@ class CloseTransaction implements Transaction
     {
         $validated = CreateCloseTransactionFormValidation::validate($data);
 
-        if (!Signature::validate(
+        if (! Signature::validate(
             $this->setSignatureHash($validated),
             $validated['signature']
         )) {
@@ -54,7 +46,7 @@ class CloseTransaction implements Transaction
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function getResponse(): Collection
     {
@@ -62,15 +54,16 @@ class CloseTransaction implements Transaction
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
+     *
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function getDetailTransaction(string $refNumber): Transaction
     {
         $validated = Validator::make([
-            'reference' => $refNumber
+            'reference' => $refNumber,
         ], [
-            'reference' => 'required|string'
+            'reference' => 'required|string',
         ])->validate();
 
         $this->response = $this->httpClient->sendRequest('GET', 'transaction/detail', $validated);
@@ -79,7 +72,7 @@ class CloseTransaction implements Transaction
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function setSignatureHash(array $data): string
     {
