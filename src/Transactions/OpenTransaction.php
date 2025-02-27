@@ -6,44 +6,35 @@ use HanzoAlpha\LaravelTripay\Exceptions\InvalidCredentialException;
 use HanzoAlpha\LaravelTripay\Exceptions\InvalidSignatureHashException;
 use HanzoAlpha\LaravelTripay\Requests\TripayClient;
 use HanzoAlpha\LaravelTripay\Signature;
-use HanzoAlpha\LaravelTripay\Validator\CreateCloseTransactionFormValidation;
 use HanzoAlpha\LaravelTripay\Validator\CreateOpenTransactionFormValidation;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Validator;
 
 class OpenTransaction implements Transaction
 {
-    /**
-     * @var \HanzoAlpha\LaravelTripay\Requests\TripayClient
-     */
     protected TripayClient $httpClient;
 
-    /**
-     * @var string
-     */
     protected string $response;
 
-    /**
-     * @param  TripayClient  $httpClient
-     */
     public function __construct(TripayClient $httpClient)
     {
         $this->httpClient = $httpClient;
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
+     *
      * @throws \HanzoAlpha\LaravelTripay\Exceptions\InvalidSignatureHashException
      */
     public function createTransaction(array $data): Transaction
     {
-        if (!config('tripay.tripay_api_production')) {
+        if (! config('tripay.tripay_api_production')) {
             throw new InvalidCredentialException('tidak dapat menggunakan api ini dalam mode sandbox.');
         }
 
         $validated = CreateOpenTransactionFormValidation::validate($data);
 
-        if (!Signature::validate(
+        if (! Signature::validate(
             $this->setSignatureHash($validated),
             $validated['signature']
         )) {
@@ -56,7 +47,7 @@ class OpenTransaction implements Transaction
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function getResponse(): Collection
     {
@@ -64,12 +55,12 @@ class OpenTransaction implements Transaction
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function getDetailTransaction(string $refNumber): Transaction
     {
         $validated = Validator::make(['uuid' => $refNumber], [
-            'uuid' => 'required|string'
+            'uuid' => 'required|string',
         ])->validate();
 
         $endpoint = 'open-payment/'.$validated['uuid'].'/detail';
@@ -80,7 +71,7 @@ class OpenTransaction implements Transaction
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function setSignatureHash(array $data): string
     {
@@ -92,14 +83,11 @@ class OpenTransaction implements Transaction
     }
 
     /**
-     * @param  string  $uuid
-     * @param  array  $data
-     * @return Transaction
      * @throws \HanzoAlpha\LaravelTripay\Exceptions\InvalidCredentialException|\GuzzleHttp\Exception\GuzzleException
      */
     public function getDaftarPembayaran(string $uuid, array $data = []): Transaction
     {
-        if (!config('tripay.tripay_api_production')) {
+        if (! config('tripay.tripay_api_production')) {
             throw new InvalidCredentialException('tidak dapat menggunakan api ini dalam mode sandbox.');
         }
 
@@ -108,7 +96,7 @@ class OpenTransaction implements Transaction
             'merchant_ref' => 'bail|nullable|string',
             'start_date' => 'bail|nullable|string|date_format:Y-m-d H:i:s',
             'end_date' => 'bail|nullable|string|date_format:Y-m-d H:i:s',
-            'per_page' => 'bail|nullable|int'
+            'per_page' => 'bail|nullable|int',
         ])->validate();
 
         $endpoint = 'open-payment/'.$uuid.'/transactions';

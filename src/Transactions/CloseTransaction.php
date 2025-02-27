@@ -4,38 +4,28 @@ namespace HanzoAlpha\LaravelTripay\Transactions;
 
 use HanzoAlpha\LaravelTripay\Exceptions\InvalidSignatureHashException;
 use HanzoAlpha\LaravelTripay\Requests\TripayClient;
-use HanzoAlpha\LaravelTripay\Transactions\Transaction;
 use HanzoAlpha\LaravelTripay\Validator\CreateCloseTransactionFormValidation;
 use Illuminate\Support\Collection;
 
 class CloseTransaction implements Transaction
 {
-    /**
-     * @var \HanzoAlpha\LaravelTripay\Requests\TripayClient
-     */
     protected TripayClient $httpClient;
 
-    /**
-     * @var string
-     */
     protected string $response;
 
-    /**
-     * @param  TripayClient  $httpClient
-     */
     public function __construct(TripayClient $httpClient)
     {
         $this->httpClient = $httpClient;
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function createTransaction(array $data): \HanzoAlpha\LaravelTripay\Transactions\Transaction
     {
         $validated = CreateCloseTransactionFormValidation::validate($data);
 
-        if (!Signature::validate(
+        if (! Signature::validate(
             $this->setSignatureHash($validated),
             $validated['signature']
         )) {
@@ -48,7 +38,7 @@ class CloseTransaction implements Transaction
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function getResponse(): Collection
     {
@@ -56,7 +46,7 @@ class CloseTransaction implements Transaction
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function getDetailTransaction(string $refNumber): \HanzoAlpha\LaravelTripay\Transactions\Transaction
     {
@@ -64,7 +54,7 @@ class CloseTransaction implements Transaction
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function setSignatureHash(array $data): string
     {

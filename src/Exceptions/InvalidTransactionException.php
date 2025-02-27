@@ -4,6 +4,4 @@ namespace HanzoAlpha\LaravelTripay\Exceptions;
 
 use Exception;
 
-class InvalidTransactionException extends Exception
-{
-}
+class InvalidTransactionException extends Exception {}
